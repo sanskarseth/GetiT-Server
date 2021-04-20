@@ -1,0 +1,5 @@
+{
+  "db": "mongodb://localhost/getit",
+  "delay": 1000,
+  "maxImageCount": 3
+}
