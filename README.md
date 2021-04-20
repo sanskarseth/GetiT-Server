@@ -1,2 +1,2 @@
-# shopage-server
-Server for shopage
+# GetiT-server
+GetiT-server
