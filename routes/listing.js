@@ -1,15 +1,15 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const store = require("../store/listings");
-const auth = require("../middleware/auth");
-const listingMapper = require("../mappers/listings");
+const { Listing } = require('../modals/listing');
 
-router.get("/:id", auth, (req, res) => {
-  const listing = store.getListing(parseInt(req.params.id));
-  if (!listing) return res.status(404).send();
-  const resource = listingMapper(listing);
-  res.send(resource);
+const auth = require('../middleware/auth');
+
+router.get('/:id', auth, async (req, res) => {
+	const listing = Listing.findById(req.params.id);
+	if (!listing) return res.status(404).send();
+
+	res.send(listing);
 });
 
 module.exports = router;

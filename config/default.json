@@ -1,5 +1,7 @@
 {
   "db": "mongodb://localhost/getit",
   "delay": 1000,
-  "maxImageCount": 3
+  "maxImageCount": 3,
+  "jwtPrivateKey": "123",
+  "requiresAuth": true
 }

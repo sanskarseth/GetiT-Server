@@ -1,0 +1,7 @@
+{
+  "db": "mongodb+srv://sanskar:@Sanskar1090@getit.2s4sx.mongodb.net/test",
+  "delay": 1000,
+  "maxImageCount": 3,
+  "jwtPrivateKey": "12345",
+  "requiresAuth": true
+}

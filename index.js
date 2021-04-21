@@ -15,13 +15,6 @@ const app = express();
 
 require('./utilities/db')();
 
-// app.use((req, res, next) => {
-// 	res.setHeader('Access-Control-Allow-Origin', '*');
-// 	res.setHeader('Access-Control-Allow-Headers', '*');
-// 	res.setHeader('Access-Control-Allow-Methods', '*');
-// 	next();
-// });
-
 app.use(express.static('public'));
 app.use(express.json());
 app.use(helmet());

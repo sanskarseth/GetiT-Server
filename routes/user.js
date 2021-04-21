@@ -1,25 +1,23 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const usersStore = require("../store/users");
-const listingsStore = require("../store/listings");
-const auth = require("../middleware/auth");
+const { User } = require('../modals/user');
+const { Listing } = require('../modals/listing');
 
-router.get("/:id", auth, (req, res) => {
-  const userId = parseInt(req.params.id);
-  const user = usersStore.getUserById(userId);
-  if (!user) return res.status(404).send();
+const auth = require('../middleware/auth');
 
-  const listings = listingsStore.filterListings(
-    listing => listing.userId === userId
-  );
+router.get('/:id', auth, async (req, res) => {
+	const user = await User.findById(req.params.id);
+	if (!user) return res.status(404).send();
 
-  res.send({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    listings: listings.length
-  });
+	const listings = await Listing.find({ userId: req.params.id });
+
+	res.send({
+		id: user._id,
+		name: user.name,
+		email: user.email,
+		listings: listings.length,
+	});
 });
 
 module.exports = router;

@@ -1,62 +1,51 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const Joi = require("joi");
-const { Expo } = require("expo-server-sdk");
+const Joi = require('joi');
+const { Expo } = require('expo-server-sdk');
 
-const usersStore = require("../store/users");
-const listingsStore = require("../store/listings");
-const messagesStore = require("../store/messages");
-const sendPushNotification = require("../utilities/pushNotifications");
-const auth = require("../middleware/auth");
-const validateWith = require("../middleware/validation");
+const { User } = require('../modals/user');
+const { Message } = require('../modals/message');
+const { Listing } = require('../modals/listing');
+
+const sendPushNotification = require('../utilities/pushNotifications');
+const auth = require('../middleware/auth');
+const validateWith = require('../middleware/validation');
 
 const schema = {
-  listingId: Joi.number().required(),
-  message: Joi.string().required(),
+	listingId: Joi.string().required(),
+	message: Joi.string().required(),
 };
 
-router.get("/", auth, (req, res) => {
-  const messages = messagesStore.getMessagesForUser(req.user.userId);
-
-  const mapUser = (userId) => {
-    const user = usersStore.getUserById(userId);
-    return { id: user.id, name: user.name };
-  };
-
-  const resources = messages.map((message) => ({
-    id: message.id,
-    listingId: message.listingId,
-    dateTime: message.dateTime,
-    content: message.content,
-    fromUser: mapUser(message.fromUserId),
-    toUser: mapUser(message.toUserId),
-  }));
-
-  res.send(resources);
+router.get('/', auth, async (req, res) => {
+	const messages = await Message.find({ toUserId: req.user.userId });
+	res.send(messages);
 });
 
-router.post("/", [auth, validateWith(schema)], async (req, res) => {
-  const { listingId, message } = req.body;
+router.post('/', [auth, validateWith(schema)], async (req, res) => {
+	const { listingId, messagee } = req.body;
 
-  const listing = listingsStore.getListing(listingId);
-  if (!listing) return res.status(400).send({ error: "Invalid listingId." });
+	const listing = await Listing.findById(listingId);
+	if (!listing) return res.status(400).send({ error: 'Invalid listingId.' });
 
-  const targetUser = usersStore.getUserById(parseInt(listing.userId));
-  if (!targetUser) return res.status(400).send({ error: "Invalid userId." });
+	const targetUser = await User.findById(listing.userId);
+	if (!targetUser) return res.status(400).send({ error: 'Invalid userId.' });
 
-  messagesStore.add({
-    fromUserId: req.user.userId,
-    toUserId: listing.userId,
-    listingId,
-    content: message,
-  });
+	let message = new Message({
+		fromUserId: req.user.userId,
+		toUserId: listing.userId,
+		listingId,
+		content: messagee,
+		dateTime: Date.now(),
+	});
 
-  const { expoPushToken } = targetUser;
+	await message.save();
 
-  if (Expo.isExpoPushToken(expoPushToken))
-    await sendPushNotification(expoPushToken, message);
+	const { expoPushToken } = targetUser;
 
-  res.status(201).send();
+	if (Expo.isExpoPushToken(expoPushToken))
+		await sendPushNotification(expoPushToken, message);
+
+	res.status(201).send();
 });
 
 module.exports = router;
