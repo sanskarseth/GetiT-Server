@@ -4,7 +4,7 @@ const config = require('config');
 
 cloudinary.config({
 	cloud_name: config.get('clou_name'),
-	api_key: config.get('clod_key'),
+	api_key: config.get('clou_key'),
 	api_secret: config.get('clou_secret'),
 });
 

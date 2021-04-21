@@ -3,9 +3,9 @@
   "port": "9000",
   "delay": 1000,
   "maxImageCount": 3,
-  "jwtPrivateKey": "",
-  "clou_name":"",
-  "clou_secret":"",
-  "clou_key":"",
+  "jwtPrivateKey": "12345",
+  "clou_name":"dgvpf7eqf",
+  "clou_secret":"vIHf6FSoLnn6QLLM_bgPEdgINF",
+  "clou_key":"437814458945231",
   "requiresAuth": true
 }
