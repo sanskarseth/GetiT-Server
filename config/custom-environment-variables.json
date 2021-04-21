@@ -1,7 +1,15 @@
 {
-  "db": "mongodb+srv://sanskar:@Sanskar1090@getit.2s4sx.mongodb.net/test",
-  "delay": 1000,
-  "maxImageCount": 3,
-  "jwtPrivateKey": "12345",
-  "requiresAuth": true
+  "db": "getit_db",
+  "jwtPrivateKey": "getit_jwtprivateKey",
+  "clou_name":"getit_cname",
+  "clou_secret":"getit_secret",
+  "clou_key":"getit_key"
 }
+
+
+
+
+
+
+
+

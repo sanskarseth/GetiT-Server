@@ -1,7 +1,11 @@
 {
   "db": "mongodb://localhost/getit",
+  "port": "9000",
   "delay": 1000,
   "maxImageCount": 3,
-  "jwtPrivateKey": "123",
+  "jwtPrivateKey": "",
+  "clou_name":"",
+  "clou_secret":"",
+  "clou_key":"",
   "requiresAuth": true
 }
