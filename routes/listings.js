@@ -32,10 +32,9 @@ const schema = {
 // 	next();
 // };
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
 	const listings = await Listing.find().select('-__v');
-	// var l = [];
-	// l.push(listings);
+	// console.log(req);
 	res.send(listings);
 });
 
@@ -77,6 +76,7 @@ router.post(
 			title: req.body.title,
 			price: parseFloat(req.body.price),
 			categoryId: req.body.categoryId,
+			userId: req.user._id,
 			description: req.body.description,
 			images: [
 				{
@@ -87,10 +87,7 @@ router.post(
 		});
 
 		if (req.body.location) listing.location = JSON.parse(req.body.location);
-		if (req.user) listing.userId = req.user.userId;
-
-		// console.log(listing);
-
+		// console.log(JSON.stringify(req));
 		// store.addListing(listing);
 
 		await listing.save();

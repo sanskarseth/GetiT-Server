@@ -23,4 +23,9 @@ router.post('/', async (req, res) => {
 		.send(_.pick(user, ['_id', 'name', 'email', 'phone']));
 });
 
+router.get('/', async (req, res) => {
+	const users = await User.find().select('-__v');
+	res.send(users);
+});
+
 module.exports = router;
