@@ -25,14 +25,7 @@ const schema = {
 	}).optional(),
 };
 
-// const validateCategoryId = (req, res, next) => {
-// 	if (!categoriesStore.getCategory(parseInt(req.body.categoryId)))
-// 		return res.status(400).send({ error: 'Invalid categoryId.' });
-
-// 	next();
-// };
-
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
 	const listings = await Listing.find().select('-__v');
 	// console.log(req);
 	res.send(listings);
@@ -41,17 +34,9 @@ router.get('/', auth, async (req, res) => {
 router.post(
 	'/',
 	[
-		// Order of these middleware matters.
-		// "upload" should come before other "validate" because we have to handle
-		// multi-part form data. Once the upload middleware from multer applied,
-		// request.body will be populated and we can validate it. This means
-		// if the request is invalid, we'll end up with one or more image files
-		// stored in the uploads folder. We'll need to clean up this folder
-		// using a separate process.
-		// auth,
+		auth,
 		upload.array('images', config.get('maxImageCount')),
 		validateWith(schema),
-		auth,
 	],
 	// https://res.cloudinary.com/dgvpf7eqf/image/upload/v1618979592/GetiT/gq2w8uukwlrp8ah9aswt.jpg
 	// https://res.cloudinary.com/dgvpf7eqf/image/upload/w_2000,h_2000,c_scale,q_50/v1618977541/GetiT/gdzdaorqrcdm3yczmplq.jpg
@@ -76,7 +61,6 @@ router.post(
 			title: req.body.title,
 			price: parseFloat(req.body.price),
 			categoryId: req.body.categoryId,
-			userId: req.user._id,
 			description: req.body.description,
 			images: [
 				{
@@ -87,6 +71,8 @@ router.post(
 		});
 
 		if (req.body.location) listing.location = JSON.parse(req.body.location);
+		if (req.user) listing.userId = req.user._id;
+
 		// console.log(JSON.stringify(req));
 		// store.addListing(listing);
 

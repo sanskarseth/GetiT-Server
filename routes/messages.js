@@ -31,7 +31,7 @@ router.post('/', [auth, validateWith(schema)], async (req, res) => {
 	if (!targetUser) return res.status(400).send({ error: 'Invalid userId.' });
 
 	let message = new Message({
-		fromUserId: req.user.userId,
+		fromUserId: req.user._id,
 		toUserId: listing.userId,
 		listingId,
 		content: messagee,
