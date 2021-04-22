@@ -21,7 +21,7 @@ router.get('/', auth, async (req, res) => {
 	res.send(messages);
 });
 
-router.post('/', [auth, validateWith(schema)], async (req, res) => {
+router.post('/', [auth], async (req, res) => {
 	const { listingId, messagee } = req.body;
 
 	const listing = await Listing.findById(ObjectId(listingId));
@@ -40,10 +40,10 @@ router.post('/', [auth, validateWith(schema)], async (req, res) => {
 
 	await message.save();
 
-	const { expoPushToken } = targetUser;
+	// const { expoPushToken } = targetUser;
 
-	if (Expo.isExpoPushToken(expoPushToken))
-		await sendPushNotification(expoPushToken, message);
+	// if (Expo.isExpoPushToken(expoPushToken))
+	// 	await sendPushNotification(expoPushToken, message);
 
 	res.status(201).send();
 });
