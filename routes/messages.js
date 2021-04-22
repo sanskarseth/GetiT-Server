@@ -24,10 +24,10 @@ router.get('/', auth, async (req, res) => {
 router.post('/', [auth, validateWith(schema)], async (req, res) => {
 	const { listingId, messagee } = req.body;
 
-	const listing = await Listing.findById(listingId);
+	const listing = await Listing.findById(ObjectId(listingId));
 	if (!listing) return res.status(400).send({ error: 'Invalid listingId.' });
 
-	const targetUser = await User.findById(listing.userId);
+	const targetUser = await User.findById(ObjectId(listing.userId));
 	if (!targetUser) return res.status(400).send({ error: 'Invalid userId.' });
 
 	let message = new Message({
