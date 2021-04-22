@@ -3,7 +3,6 @@ const router = express.Router();
 const Joi = require('joi');
 const { Expo } = require('expo-server-sdk');
 const mongoose = require('mongoose');
-var ObjectId = mongoose.Types.ObjectId();
 
 const { User } = require('../modals/user');
 const { Message } = require('../modals/message');
@@ -25,10 +24,13 @@ router.get('/', auth, async (req, res) => {
 
 router.post('/', [auth], async (req, res) => {
 	try {
-		const listing = await Listing.findById(ObjectId(req.body.listingId));
+		const listing = await Listing.findById(
+			mongoose.Types.ObjectId(req.body.listingId)
+		);
 		if (!listing) return res.status(400).send({ error: 'Invalid listingId.' });
 
-		const targetUser = await User.findById(ObjectId(listing.userId));
+		const targetUser = await User.findById(listing.userId);
+		// console.log('saf', targetUser);
 		if (!targetUser) return res.status(400).send({ error: 'Invalid userId.' });
 
 		let message = new Message({
@@ -40,16 +42,16 @@ router.post('/', [auth], async (req, res) => {
 		});
 
 		await message.save();
+
+		const { expoPushToken } = targetUser;
+
+		if (Expo.isExpoPushToken(expoPushToken))
+			await sendPushNotification(expoPushToken, message);
+
+		res.status(201).send('added');
 	} catch (ex) {
 		console.log(ex);
 	}
-
-	const { expoPushToken } = targetUser;
-
-	if (Expo.isExpoPushToken(expoPushToken))
-		await sendPushNotification(expoPushToken, message);
-
-	res.status(201).send('added');
 });
 
 module.exports = router;
