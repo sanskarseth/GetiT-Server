@@ -18,7 +18,8 @@ const schema = {
 };
 
 router.get('/', auth, async (req, res) => {
-	const messages = await Message.find({ toUserId: req.user.userId });
+	const messages = await Message.find({ toUserId: req.user._id });
+	// console.log(messages);
 	res.send(messages);
 });
 
