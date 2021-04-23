@@ -26,7 +26,7 @@ const schema = {
 };
 
 router.get('/', async (req, res) => {
-	const listings = await Listing.find().select('-__v');
+	const listings = await Listing.find().select('-__v').sort('title');
 	// console.log(req);
 	res.send(listings);
 });
