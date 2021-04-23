@@ -55,4 +55,12 @@ router.post('/', [auth], async (req, res) => {
 	}
 });
 
+router.delete('/:id', auth, async (req, res) => {
+	const message = await Message.findByIdAndRemove(req.params.id);
+
+	if (!message) return res.status(404).send('Message Not Found.');
+
+	res.send(message);
+});
+
 module.exports = router;
