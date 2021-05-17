@@ -8,14 +8,14 @@ This is the sever-side of the app which is made with Node & Express. Images are 
 
 ## Installation
 
-Use the package manager [npm](https://www.npmjs.com/) to install ShoppeR-Server.
+Use the package manager [npm](https://www.npmjs.com/) to install GetiT-Server.
 
 ```bash
 npm install
 ```
 ## Running
 
-Use the package manager [npm](https://www.npmjs.com/) to run ShoppeR-Server.
+Use the package manager [npm](https://www.npmjs.com/) to run GetiT-Server.
 
 ```bash
 npm start
